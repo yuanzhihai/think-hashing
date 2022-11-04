@@ -1,0 +1,34 @@
+{
+  "name": "vendor_name/think-hashing",
+  "description": "The thinkphp6 Hashing package.",
+  "minimum-stability": "stable",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "php",
+    "hyperf",
+    "hashing"
+  ],
+  "authors": [
+    {
+      "name": "yuanzhihai",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.3",
+    "topthink/framework": "^6.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "yzh52521\\Hashing\\": "src/"
+    }
+  },
+  "extra": {
+    "think": {
+      "config":{
+        "hashing": "src/config/config.php"
+      }
+    }
+  }
+}

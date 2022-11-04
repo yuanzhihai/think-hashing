@@ -5,7 +5,7 @@ namespace yzh52521\Hashing;
 use think\Facade;
 
 /**
- * Class Filesystem
+ * Class Hash
  * @package think\facade
  * @mixin \yzh52521\Hashing\HashManager
  * @method static driver( string $driver = null ) ,null|string

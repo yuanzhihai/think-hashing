@@ -2,6 +2,7 @@
 
 namespace yzh52521\Hashing;
 
+use Closure;
 use InvalidArgumentException;
 use think\App;
 use think\Config;
@@ -12,7 +13,7 @@ use yzh52521\Hashing\Driver\Argon2IdDriver;
 use yzh52521\Hashing\Driver\Argon2IDriver;
 use yzh52521\Hashing\Driver\BcryptDriver;
 
-class HashManager implements HashInterface
+class HashManager implements HashInterface,DriverInterface
 {
     /**
      * The config instance.
@@ -51,7 +52,7 @@ class HashManager implements HashInterface
      *
      * @throws \InvalidArgumentException
      */
-    public function driver(?string $driver = null): DriverInterface
+    public function driver(string $driver = null): DriverInterface
     {
         $driver = $driver ?: $this->getDefaultDriver();
 
@@ -66,6 +67,26 @@ class HashManager implements HashInterface
         }
 
         return $this->drivers[$driver];
+    }
+
+    public function info(string $hashedValue): array
+    {
+        return $this->driver()->info( $hashedValue );
+    }
+
+    public function make(string $value,array $options = []): string
+    {
+        return $this->driver()->make( $value,$options );
+    }
+
+    public function check(string $value,string $hashedValue,array $options = []): bool
+    {
+        return $this->driver()->check( $value,$hashedValue,$options );
+    }
+
+    public function needsRehash(string $hashedValue,array $options = []): bool
+    {
+        return $this->driver()->needsRehash( $hashedValue,$options );
     }
 
     protected function createDriver($driver)
@@ -117,6 +138,20 @@ class HashManager implements HashInterface
     }
 
     /**
+     * Register a custom driver creator Closure.
+     *
+     * @param string $driver
+     * @param \Closure $callback
+     * @return $this
+     */
+    public function extend(string $driver,Closure $callback)
+    {
+        $this->customCreators[$driver] = $callback;
+
+        return $this;
+    }
+
+    /**
      * Call a custom driver creator.
      *
      * @param string $driver
@@ -135,5 +170,17 @@ class HashManager implements HashInterface
     public function getDefaultDriver()
     {
         return $this->config->get( 'hashing.default','bcrypt' );
+    }
+
+    /**
+     * Dynamically call the default driver instance.
+     *
+     * @param string $method
+     * @param array $parameters
+     * @return mixed
+     */
+    public function __call($method,$parameters)
+    {
+        return $this->driver()->$method( ...$parameters );
     }
 }

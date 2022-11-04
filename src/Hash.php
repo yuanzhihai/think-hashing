@@ -2,34 +2,23 @@
 
 namespace yzh52521\Hashing;
 
-use think\facade\App;
-use yzh52521\Hashing\Contract\DriverInterface;
-use yzh52521\Hashing\Contract\HashInterface;
+use think\Facade;
 
-abstract class Hash
+/**
+ * Class Filesystem
+ * @package think\facade
+ * @mixin \yzh52521\Hashing\HashManager
+ * @method static driver( string $driver = null ) ,null|string
+ * @method static array info(string $hashedValue)
+ * @method static bool check(string $value, string $hashedValue, array $options = [])
+ * @method static bool needsRehash(string $hashedValue, array $options = [])
+ * @method static string make(string $value, array $options = [])
+ * @method static extend($driver, \Closure $callback)
+ */
+class Hash extends Facade
 {
-    public static function getDriver(?string $driver = null): DriverInterface
+    protected static function getFacadeClass()
     {
-        return App::getInstance()->get( HashInterface::class )->driver( $driver );
-    }
-
-    public static function info(string $hashedValue,?string $driverName = null): array
-    {
-        return static::getDriver( $driverName )->info( $hashedValue );
-    }
-
-    public static function make(string $value,array $options = [],?string $driverName = null): string
-    {
-        return static::getDriver( $driverName )->make( $value,$options );
-    }
-
-    public static function check(string $value,string $hashedValue,array $options = [],?string $driverName = null): bool
-    {
-        return static::getDriver( $driverName )->check( $value,$hashedValue,$options );
-    }
-
-    public static function needsRehash(string $hashedValue,array $options = [],?string $driverName = null): bool
-    {
-        return static::getDriver( $driverName )->needsRehash( $hashedValue,$options );
+        return HashManager::class;
     }
 }

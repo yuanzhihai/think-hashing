@@ -113,10 +113,11 @@ if (Hash::needsRehash($hashed)) {
 ### 使用指定驱动
 
 ```php
-$hasher = Hash::getDriver('argon2i');
+$hasher = Hash::driver('argon2i');
 $hasher->make('plain-text');
 ```
 
 ### 使用自定义哈希类
+
 
 实现 `\yzh52521\Hashing\Contract\DriverInterface` 接口，并参照配置文件中的其他算法进行配置。

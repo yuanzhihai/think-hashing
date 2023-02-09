@@ -1,4 +1,4 @@
-# thinkphp6.x 哈希组件
+# thinkphp6+ 哈希组件
 
 该组件为存储用户密码提供了安全的 Bcrypt 和 Argon2 哈希加密方式。
 
